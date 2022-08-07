@@ -52,6 +52,97 @@ fn main() {
     let mut s5 = String::from("hello ");
 
     change(&mut s5);
+
+    let yellow1 = FlowerColor::Yellow;
+    let red = FlowerColor::Red;
+    let white = FlowerColor::White;
+    print_flower_color(yellow1);
+    print_flower_color(red);
+    print_flower_color(white);
+
+    let flower = Flower {
+        white_flower: FlowerColor::White,
+        red_flower: FlowerColor::Red,
+        yellow_flower: FlowerColor::Yellow,
+    };
+    println!("{:?}", &flower);
+    let f1 = Flower::flower_new(flower.white_flower, flower.red_flower, flower.yellow_flower);
+    println!("{:#?}", &f1);
+
+    let f2 = Flower::flower_new_one(f1);
+    println!("{:#?}", &f2);
+
+    let card_quit = Card::Quit;
+    let card_message = Card::CardMessage(String::from("消息"), 22);
+    let card_move = Card::CardMove { x: (23), y: (33) };
+    let card_color = Card::CardColor(FlowerColor::Red);
+
+    println!("{:#?}", &card_quit);
+    println!("{:#?}", &card_message);
+    println!("{:#?}", &card_move);
+    println!("{:#?}", &card_color);
+}
+
+enum Card {
+    CardMessage(String, i32),
+    CardColor(FlowerColor),
+    CardMove { x: i32, y: i32 },
+    Quit,
+}
+
+impl Debug for Card {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::CardMessage(arg0, arg1) => f
+                .debug_tuple("CardMessage")
+                .field(arg0)
+                .field(arg1)
+                .finish(),
+            Self::CardColor(arg0) => f.debug_tuple("CardColor").field(arg0).finish(),
+            Self::CardMove { x, y } => f
+                .debug_struct("CardMove")
+                .field("x", x)
+                .field("y", y)
+                .finish(),
+            Self::Quit => write!(f, "Quit"),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct Flower {
+    white_flower: FlowerColor,
+    red_flower: FlowerColor,
+    yellow_flower: FlowerColor,
+}
+
+impl Flower {
+    fn flower_new(
+        white_flower: FlowerColor,
+        red_flower: FlowerColor,
+        yellow_flower: FlowerColor,
+    ) -> Self {
+        Self {
+            white_flower,
+            red_flower,
+            yellow_flower,
+        }
+    }
+
+    fn flower_new_one(color: Flower) -> Flower {
+        color
+    }
+}
+
+fn print_flower_color(color: FlowerColor) {
+    println!("{:?}", &color);
+}
+
+#[derive(Debug)]
+enum FlowerColor {
+    White,
+    Red,
+    Yellow,
 }
 
 fn change(str: &mut String) {
